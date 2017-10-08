@@ -1,0 +1,35 @@
+#!/usr/bin/env python2
+# Unfortunately, this has to be Python 2 until the incompatible call to Logger is fixed
+'''Provide a service to compute the reward for a particular point for problem 5c in HW1'''
+
+from math import cos, sin
+from random import randint
+
+import rospy
+from foundations_hw1.srv import Reward
+
+
+def reward_server():
+  '''The server for the reward function service'''
+  rospy.init_node('reward_server')
+  rospy.loginfo('Started up!')
+  # These bounds chosen more or less arbitrarily. They seem to produce reasonable-looking surfaces
+  # in Mathematica
+  sin_coeff = randint(5, 50)
+  cos_coeff = randint(20, 200)
+  xx_coef = randint(10, 30)
+  xy_coef = randint(10, 30)
+
+  def reward(req):
+    '''Return the value for the function at the given point'''
+    x = req.point.x
+    y = req.point.y
+    return 100 * (1.0 / sin_coeff * sin(xx_coef * x ** 2) + 1.0 / cos_coeff * cos(xy_coef * x * y))
+
+  rospy.Service('reward', Reward, reward)
+  rospy.spin()
+  rospy.loginfo('Shutting down!')
+
+
+if __name__ == '__main__':
+  reward_server()

@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: foundations_hw2
+Description: Description of foundations_hw2
+Version: 1.0.0
+Cflags: -I/usr/local/include
+Libs: -L/usr/local/lib 
+Requires: message_runtime

@@ -1,0 +1,26 @@
+#!/usr/bin/env python2
+# Unfortunately, this has to be Python 2 until the incompatible call to Logger is fixed
+'''Specify a publishing rate for a ping message'''
+
+from random import randint
+
+import rospy
+from std_msgs.msg import Int32
+
+
+def run():
+  '''The main entry point'''
+  rospy.init_node('pub_rate', anonymous=True)
+  rospy.loginfo('Initializing publisher')
+  pub = rospy.Publisher('pub_rate', Int32, queue_size=5, latch=True)
+
+  def send_rate(_event):
+    '''Publish a new rate for the ping topic'''
+    pub.publish(randint(1, 30))
+
+  rospy.loginfo('Starting rate updates')
+  rospy.Timer(rospy.Duration(3.0), send_rate)
+  rospy.spin()
+
+if __name__ == '__main__':
+  run()

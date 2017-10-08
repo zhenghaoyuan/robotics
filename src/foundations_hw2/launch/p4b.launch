@@ -1,0 +1,6 @@
+<!-- Launch the framework code for problem 3b on HW2 -->
+<launch>
+  <node name="start_vrep" pkg="foundations_hw2" type="start_vrep" args="~/V-REP $(find foundations_hw2)/scenes/hw2-rotations.ttt"/>
+  <node name="gen_angles" pkg="foundations_hw2" type="gen_angles"/>
+</launch>
+

@@ -1,0 +1,6 @@
+<!-- Launch the code for problem 5b -->
+<launch>
+  <node name="sim" pkg="turtlesim" type="turtlesim_node"/>
+  <node name="randomt" pkg="hw1" type="p5b1.py"/>
+  <node name="imitationt" pkg="hw1" type="p5b2.py"/>
+</launch>

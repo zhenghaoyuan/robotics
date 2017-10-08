@@ -1,0 +1,6 @@
+<!-- Launch the framework code for problem 4b on HW1 -->
+<launch>
+  <include file="$(find foundations_hw1)/launch/default.launch"/>
+  <node name="image_sensor" pkg="foundations_hw1" type="image_sensor"/>
+</launch>
+

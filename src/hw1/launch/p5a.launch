@@ -1,0 +1,13 @@
+<!-- Launch the code for problem 5a -->
+<launch>
+  <node name="sim" pkg="turtlesim" type="turtlesim_node" />
+  <node name="p5a1" pkg="hw1" type="p5a.py" args="0.6 10.0"/>
+  <node name="p5a2" pkg="hw1" type="p5a.py" args="1.1 9.5"/>
+  <node name="p5a3" pkg="hw1" type="p5a.py" args="1.6 9.0"/>
+  <node name="p5a4" pkg="hw1" type="p5a.py" args="2.1 8.5"/>
+  <node name="p5a5" pkg="hw1" type="p5a.py" args="2.6 8.0"/>
+  <node name="p5a6" pkg="hw1" type="p5a.py" args="3.1 7.5"/>
+  <node name="p5a7" pkg="hw1" type="p5a.py" args="3.6 7.0"/>
+  <node name="p5a8" pkg="hw1" type="p5a.py" args="4.1 6.5"/>
+  <node name="p5a9" pkg="hw1" type="p5a.py" args="4.6 6.0"/>
+</launch>

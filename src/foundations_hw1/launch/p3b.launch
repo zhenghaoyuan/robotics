@@ -1,0 +1,5 @@
+<!-- Launch the framework code for problem 3b on HW1 -->
+<launch>
+  <include file="$(find foundations_hw1)/launch/default.launch"/>
+  <node name="tag_launcher" pkg="foundations_hw1" type="tag_launcher"/>
+</launch>

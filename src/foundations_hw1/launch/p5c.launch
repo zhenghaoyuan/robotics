@@ -1,0 +1,7 @@
+<!-- Launch the framework code for problem 5c on HW1 -->
+<launch>
+  <include file="$(find foundations_hw1)/launch/default.launch"/>
+  <node name="reward_service" pkg="foundations_hw1" type="reward_func"/>
+</launch>
+
+

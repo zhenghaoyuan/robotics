@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/cs4750/catkin/devel/setup.sh

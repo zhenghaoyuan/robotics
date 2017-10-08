@@ -1,0 +1,64 @@
+#!/usr/bin/env python2
+# Unfortunately, this has to be Python 2 until the incompatible call to Logger is fixed
+'''Use turtlesim to move a target to be chased'''
+
+from functools import partial
+from random import randint
+from math import sqrt
+
+import rospy
+from geometry_msgs.msg import Point
+from turtlesim.msg import Pose
+from turtlesim.srv import Spawn, TeleportAbsolute
+
+
+position = None
+
+
+def pose_callback(pub, teleporter, data):
+  '''Callback for the turtle's pose topic'''
+  if position:
+    distance = sqrt((position.x - data.x) ** 2 + (position.y - data.y) ** 2)
+    if distance <= 1.0:
+      rospy.loginfo('Too close! Moving...')
+      x, y = randint(0, 12), randint(0, 12)
+      teleporter(x, y, 0)
+      pub.publish(x, y, 0)
+
+
+def update_position(data):
+  '''Update the position of the target turtle'''
+  global position
+  position = data
+
+
+def run():
+  '''Main point of entry'''
+  rospy.init_node('turtle_target', anonymous=True, disable_signals=True)
+  rospy.loginfo('Spawning target turtle')
+  rospy.wait_for_service('spawn')
+  turtle_spawn = rospy.ServiceProxy('spawn', Spawn)
+  x, y = randint(0, 12), randint(0, 12)
+  try:
+    turtle_name = turtle_spawn(x, y, 0, 'target_turtle').name
+  except rospy.ServiceException as ex:
+    rospy.logerr('Could not spawn turtle! Exception: {}'.format(ex))
+    rospy.signal_shutdown("Can't spawn...")
+
+  rospy.loginfo('Activating teleporter')
+  rospy.wait_for_service('{}/teleport_absolute'.format(turtle_name))
+  turtle_teleport = rospy.ServiceProxy('{}/teleport_absolute'.format(turtle_name), TeleportAbsolute)
+
+  rospy.loginfo('Creating publisher')
+  loc_pub = rospy.Publisher('/hw1/target_loc', Point, queue_size=10, latch=True)
+  loc_pub.publish(x, y, 0)
+
+  rospy.loginfo('Setting up callbacks')
+  rospy.Subscriber('turtle1/pose', Pose, partial(pose_callback, loc_pub, turtle_teleport))
+  rospy.Subscriber('{}/pose'.format(turtle_name), Pose, update_position)
+
+  rospy.spin()
+
+
+if __name__ == '__main__':
+  run()

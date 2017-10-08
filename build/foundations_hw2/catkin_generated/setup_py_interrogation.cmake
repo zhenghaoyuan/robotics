@@ -1,0 +1,6 @@
+set(foundations_hw2_SETUP_PY_VERSION "1.0.0")
+set(foundations_hw2_SETUP_PY_SCRIPTS "")
+set(foundations_hw2_SETUP_PY_PACKAGES "foundations_hw2")
+set(foundations_hw2_SETUP_PY_PACKAGE_DIRS "src/foundations_hw2")
+set(foundations_hw2_SETUP_PY_MODULES "")
+set(foundations_hw2_SETUP_PY_MODULE_DIRS "")

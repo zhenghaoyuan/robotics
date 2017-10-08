@@ -1,0 +1,5 @@
+<!-- launch code for problem 3b -->
+<launch>
+  <node name="server" pkg="hw2" type="p3a.py"/>
+  <node name="client" pkg="hw2" type="p3b.py"/>
+</launch>

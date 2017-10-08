@@ -1,0 +1,5 @@
+<!-- Launch the framework code for problem 4c on HW1 -->
+<launch>
+  <node name="pub_rate" pkg="foundations_hw1" type="pub_rate"/>
+</launch>
+

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package>
+  <name>foundations_hw1</name>
+  <version>1.0.0</version>
+  <description>The framework code for Cornell Foundations of Robotics coding HW 1</description>
+  <maintainer email="wbthomason@cs.cornell.edu">Wil Thomason</maintainer>
+  <license>MIT</license>
+  <author email="wbthomason@cs.cornell.edu">Wil Thomason</author>
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>turtlesim</build_depend>
+  <build_depend>message_generation</build_depend>
+  <run_depend>turtlesim</run_depend>
+  <run_depend>message_runtime</run_depend>
+  <export></export>
+</package>

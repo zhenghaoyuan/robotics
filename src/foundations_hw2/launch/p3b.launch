@@ -1,0 +1,5 @@
+<!-- Launch the framework code for problem 2c on HW1 -->
+<launch>
+  <node name="start_vrep" pkg="foundations_hw2" type="start_vrep" args="~/V-REP $(find foundations_hw2)/scenes/hw2-whiteboard.ttt"/>
+</launch>
+

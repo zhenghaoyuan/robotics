@@ -1,0 +1,1 @@
+build = "cd ../.. && catkin_make && cp src/foundations_hw2/libv_repExtRosInterface.so ~/V-REP/"

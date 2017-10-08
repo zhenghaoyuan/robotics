@@ -1,0 +1,72 @@
+#!/usr/bin/env python2
+# Unfortunately, this has to be Python 2 until the incompatible call to Logger is fixed
+'''Make a turtle which plays "tag" for p3b'''
+
+from math import sqrt, atan2
+from random import randint, choice
+import numpy as np
+
+import rospy
+from geometry_msgs.msg import Twist, Vector3
+from turtlesim.msg import Pose
+from turtlesim.srv import Spawn, SetPen
+from foundations_hw1.srv import Escape
+
+position = None
+
+
+def pose_callback(data):
+  '''Callback for the turtle's pose topic'''
+  global position
+  position = data
+
+
+def run():
+  '''Main point of entry'''
+  rospy.init_node('turtle_tag', anonymous=True)
+  rospy.loginfo('Spawning turtle')
+  rospy.wait_for_service('spawn')
+  turtle_spawn = rospy.ServiceProxy('spawn', Spawn)
+  try:
+    turtle_name = turtle_spawn(choice([1, -1]) * randint(2, 4) + 6,
+                               choice([1, -1]) * randint(2, 4) + 6,
+                               0,
+                               None).name
+  except rospy.ServiceException as ex:
+    rospy.logerr('Could not spawn turtle! Exception: {}'.format(ex))
+    rospy.signal_shutdown("Couldn't spawn!")
+
+  rospy.wait_for_service('{}/set_pen'.format(turtle_name))
+  pen_color = rospy.ServiceProxy('{}/set_pen'.format(turtle_name), SetPen)
+  try:
+    pen_color(255, 0, 0, 1, False)
+  except rospy.ServiceException as ex:
+    rospy.logerr('Could not change pen color! Exception: {}'.format(ex))
+
+  escape = rospy.ServiceProxy('escape', Escape)
+
+  rospy.loginfo('Creating publisher')
+  pub = rospy.Publisher('{}/cmd_vel'.format(turtle_name), Twist, queue_size=10)
+
+  rospy.loginfo('Setting up callbacks')
+  rospy.Subscriber('{}/pose'.format(turtle_name), Pose, pose_callback)
+
+  rate = rospy.Rate(1)
+  goal = None
+  while not rospy.is_shutdown():
+    distance = sqrt((goal.x - position.x) ** 2 + (goal.y - position.y) ** 2)\
+        if goal and position else 0
+    if distance <= 1.0:
+      rospy.loginfo('Reached destination!')
+      rospy.wait_for_service('escape')
+      goal = escape(position, turtle_name).goal
+    if position:
+      vel_vec = np.array([goal.x - position.x, goal.y - position.y])
+      x = np.sqrt(np.dot(vel_vec, vel_vec)) * 0.5
+      z = atan2(vel_vec[1], vel_vec[0]) - position.theta
+      pub.publish(Vector3(x, 0, 0), Vector3(0, 0, z))
+    rate.sleep()
+
+
+if __name__ == '__main__':
+  run()

@@ -1,0 +1,38 @@
+#!/usr/bin/env python2
+# Unfortunately, this has to be Python 2 until the incompatible call to Logger is fixed
+'''Launch a random number of "tag"-playing turtles for p3b'''
+
+from random import randint
+
+import roslaunch
+import rospy
+
+
+def run():
+  '''The main entry point'''
+  rospy.init_node('tag_launcher')
+  rospy.loginfo('Loading tag turtle node')
+  tag = roslaunch.Node('foundations_hw1', 'turtle_tag')
+  num_turtles = randint(2, 5)
+  rospy.loginfo('Starting launcher')
+  launch = roslaunch.scriptapi.ROSLaunch()
+  launch.start()
+  procs = []
+  rospy.loginfo('Launching {} turtles'.format(num_turtles))
+  for i in range(num_turtles):
+    # The spawn service is sometimes dumb, so we add a delay between calls
+    tag.name = 'turtle_tag{}'.format(i)
+    procs.append(launch.launch(tag))
+    rospy.sleep(0.3)
+
+  rospy.loginfo('Launching chaser')
+  chaser = roslaunch.Node('foundations_hw1', 'turtle_tag_chaser')
+  chaser.args = str(num_turtles)
+  procs.append(launch.launch(chaser))
+
+  rospy.loginfo('Spinning!')
+  rospy.spin()
+
+
+if __name__ == '__main__':
+  run()

@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+'''Provide youBot arm configurations as angles for HW2'''
+
+from math import radians
+from random import uniform
+
+import rospy
+from foundations_hw2.msg import JointAngles
+
+
+def gen_config():
+  '''Create and return a valid arm configuration'''
+  # Values taken from V-REP joint limits
+  return [uniform(radians(-169), radians(169)),
+          uniform(radians(-90), radians(75)),
+          uniform(radians(-131), radians(131)),
+          uniform(radians(-102), radians(102)),
+          uniform(radians(-90), radians(90))]
+
+
+if __name__ == '__main__':
+  rospy.init_node('arm_config', anonymous=True)
+  config_pub = rospy.Publisher('foundations_hw2/arm_config', JointAngles, queue_size=5)
+  pub_rate = rospy.Rate(2)
+  rospy.loginfo('Publishing configs')
+  while not rospy.is_shutdown():
+    config = gen_config()
+    config_pub.publish(config)
+    pub_rate.sleep()

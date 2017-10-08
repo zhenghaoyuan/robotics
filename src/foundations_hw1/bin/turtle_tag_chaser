@@ -1,0 +1,66 @@
+#!/usr/bin/env python2
+# Unfortunately, this has to be Python 2 until the incompatible call to Logger is fixed
+'''Use turtle1 to chase the other turtles around'''
+
+from functools import partial
+from math import sqrt, atan2
+import sys
+import numpy as np
+
+import rospy
+from geometry_msgs.msg import Twist, Vector3
+from turtlesim.msg import Pose
+
+turtles = []
+position = None
+
+
+def pose_callback(index, data):
+  '''Callback for the turtles' pose topics'''
+  global turtles
+  turtles[index] = data
+
+
+def self_pose(data):
+  '''Callback for turtle1's pose'''
+  global position
+  position = data
+
+
+def run(argv):
+  '''Main point of entry'''
+  argv = rospy.myargv(argv)
+  rospy.init_node('turtle_tag_chaser', anonymous=True)
+
+  rospy.loginfo('Creating publisher')
+  pub = rospy.Publisher('turtle1/cmd_vel', Twist, queue_size=10)
+
+  rospy.loginfo('Setting up callbacks')
+
+  num_turtles = int(argv[1])
+  for i in range(num_turtles):
+    turtles.append(None)
+    turtle_name = 'turtle{}'.format(2 + i)
+    rospy.Subscriber('{}/pose'.format(turtle_name), Pose, partial(pose_callback, i))
+
+  rospy.Subscriber('turtle1/pose', Pose, self_pose)
+  rate = rospy.Rate(1)
+  while not rospy.is_shutdown():
+    dists = []
+    my_pos = position
+    for pos in turtles:
+      distance = sqrt((pos.x - my_pos.x) ** 2 + (pos.y - my_pos.y) ** 2)\
+          if my_pos and pos else np.inf
+      dists.append(distance)
+    target_index = np.argmin(dists)
+    if dists[target_index] < np.inf:
+      target = turtles[target_index]
+      vel_vec = np.array([target.x - my_pos.x, target.y - my_pos.y])
+      x = np.sqrt(np.dot(vel_vec, vel_vec)) * 0.8
+      z = atan2(vel_vec[1], vel_vec[0]) - my_pos.theta
+      pub.publish(Vector3(x, 0, 0), Vector3(0, 0, z))
+    rate.sleep()
+
+
+if __name__ == '__main__':
+  run(sys.argv)

@@ -1,0 +1,5 @@
+<!-- Launch turtlesim for the framework code for HW1 -->
+<launch>
+  <node name="turtlesim_node" pkg="turtlesim" type="turtlesim_node"/>
+</launch>
+

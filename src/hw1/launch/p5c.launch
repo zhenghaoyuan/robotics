@@ -1,0 +1,6 @@
+<!-- Launch the code for problem 5a -->
+<launch>
+  <node name="p5c1" pkg="hw1" type="p5c.py" args="1.0 1.0"/>
+  <node name="p5c2" pkg="hw1" type="p5c.py" args="2.0 2.0"/>
+  <node name="p5c3" pkg="hw1" type="p5c.py" args="3.0 3.0"/>
+</launch>

@@ -1,0 +1,34 @@
+#!/usr/bin/env python
+'''Provide random-ish velocity vectors for HW2'''
+
+from random import uniform
+
+import rospy
+from geometry_msgs.msg import Twist
+
+
+def make_vel(last):
+  '''Create and return a reasonable velocity vector'''
+  if last:
+    last.linear.x += uniform(-1, 1)
+    last.linear.y += uniform(-1, 1)
+    last.angular.z += uniform(-0.5, 0.5)
+    return last
+
+  vel_vec = Twist()
+  vel_vec.linear.x = uniform(-5, 5)
+  vel_vec.linear.y = uniform(-5, 5)
+  vel_vec.angular.z = uniform(-0.5, 0.5)
+  return vel_vec
+
+
+if __name__ == '__main__':
+  rospy.init_node('vel_gen', anonymous=True)
+  vel_pub = rospy.Publisher('foundations_hw2/cmd_vel', Twist, queue_size=10)
+  pub_rate = rospy.Rate(5)
+  rospy.loginfo('Publishing vels')
+  vel = None
+  while not rospy.is_shutdown():
+    vel = make_vel(vel)
+    vel_pub.publish(vel)
+    pub_rate.sleep()

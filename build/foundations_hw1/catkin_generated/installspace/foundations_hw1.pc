@@ -1,0 +1,8 @@
+prefix=/home/cs4750/catkin/install
+
+Name: foundations_hw1
+Description: Description of foundations_hw1
+Version: 1.0.0
+Cflags: -I/home/cs4750/catkin/install/include
+Libs: -L/home/cs4750/catkin/install/lib 
+Requires: message_runtime

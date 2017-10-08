@@ -1,0 +1,8 @@
+prefix=/home/wil/projects/research/foundations-of-robotics/HW/coding/src/kinematics/src/foundations_hw2/build/devel
+
+Name: foundations_hw2
+Description: Description of foundations_hw2
+Version: 1.0.0
+Cflags: -I/home/wil/projects/research/foundations-of-robotics/HW/coding/src/kinematics/src/foundations_hw2/build/devel/include
+Libs: -L/home/wil/projects/research/foundations-of-robotics/HW/coding/src/kinematics/src/foundations_hw2/build/devel/lib 
+Requires: message_runtime

@@ -1,0 +1,5 @@
+<!-- Launch the framework code for problem 2c on HW1 -->
+<launch>
+  <include file="$(find foundations_hw1)/launch/default.launch"/>
+  <node name="turtle_target" pkg="foundations_hw1" type="turtle_target"/>
+</launch>

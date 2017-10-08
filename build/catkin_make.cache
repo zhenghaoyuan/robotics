@@ -1,0 +1,2 @@
+foundations_hw1:foundations_hw2:hw1:hw1cp:hw2
+-DCATKIN_DEVEL_PREFIX=/home/cs4750/catkin/devel -DCMAKE_INSTALL_PREFIX=/home/cs4750/catkin/install -G Unix Makefiles
